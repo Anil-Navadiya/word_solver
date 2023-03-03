@@ -39,8 +39,14 @@ class WordGameMainScreen extends FlameGame
   late AddText firstAddText, secondAddText, thirdAddText, fourthAddText;
 
   // late AddText addText;
+
+  TextComponent firstValue =TextComponent(text: "");
+  TextComponent secondValue = TextComponent(text: "");
+  TextComponent thirdValue = TextComponent(text: "");
+  TextComponent fourthValue = TextComponent(text: "");
   late Character character;
   late Sprite abcd;
+  late String finalString;
   late Sprite wordImg;
   late String randomStringWord;
   late Rect drawLine;
@@ -84,6 +90,30 @@ class WordGameMainScreen extends FlameGame
       ..text = "You are Winner"
       ..textRenderer = renderText
       ..position = Vector2(100, 200);
+
+    firstValue
+      ..text = ""
+      ..textRenderer = renderText
+      ..position = Vector2(100, 100);
+    add(firstValue);
+
+    secondValue
+      ..text = ""
+      ..textRenderer = renderText
+      ..position = Vector2(150, 100);
+    add(secondValue);
+
+    thirdValue
+      ..text = ""
+      ..textRenderer = renderText
+      ..position = Vector2(200, 100);
+    add(thirdValue);
+
+    fourthValue
+      ..text
+      ..textRenderer = renderText
+      ..position = Vector2(250, 100);
+    add(fourthValue);
 
     dev.log("=======> ${randomWord.text}");
     dev.log("=======> ${randomWord.text[0]}");
@@ -212,7 +242,7 @@ class WordGameMainScreen extends FlameGame
     // _startPosition = info.raw.globalPosition;
     _currentPosition = info.raw.globalPosition;
 
-    var delta = _currentPosition! - _startPosition!;
+    var delta = _currentPosition - _startPosition;
     dev.log("delta ==> ${delta.distance}");
     dev.log("_currentPosition ====> $_currentPosition");
 
@@ -238,7 +268,11 @@ class WordGameMainScreen extends FlameGame
 
   @override
   void update(double dt) {
+
+    // if(randomWord.text =)
+    // dev.log(randomStringWord[0]);
     super.update(dt);
+
   }
 
   void drawRect(Canvas canvas) {
@@ -257,7 +291,7 @@ class WordGameMainScreen extends FlameGame
       randomWord.text[0],
       randomWord.text[1],
       randomWord.text[2],
-      randomWord.text[3],
+      randomWord.text[3],//
     ];
     String allChars = randomWord.text;
     final randomString = List.generate(lengthOfString,
@@ -302,24 +336,28 @@ class WordGameMainScreen extends FlameGame
         button: wordImg,
         onPressed: () {
           dev.log("=======> ${name.text}");
-          if (randomWord.text[0] == name.text) {
-            firstAddText = AddText(" ${name.text}")
-              ..position = Vector2(50, 100);
-            // dev.log(addText.text);
-            add(firstAddText);
-          } else if (randomWord.text[1] == name.text) {
-            secondAddText = AddText(" ${name.text}")
-              ..position = Vector2(120, 100);
-            add(secondAddText);
-          } else if (randomWord.text[2] == name.text) {
-            thirdAddText = AddText(" ${name.text}")
-              ..position = Vector2(190, 100);
-            add(thirdAddText);
-          } else if (randomWord.text[3] == name.text) {
-            fourthAddText = AddText(" ${name.text}")
-              ..position = Vector2(260, 100);
-            add(fourthAddText);
-          }
+          // if (randomWord.text[0] == name.text) {
+          //   firstAddText = AddText(" ${name.text}")
+          //     ..position = Vector2(50, 100);
+          //   dev.log(firstAddText.text);
+          //   add(firstAddText);
+          // } else if (randomWord.text[1] == name.text) {
+          //   secondAddText = AddText(" ${name.text}")
+          //     ..position = Vector2(120, 100);
+          //   add(secondAddText);
+          // } else if (randomWord.text[2] == name.text) {
+          //   thirdAddText = AddText(" ${name.text}")
+          //     ..position = Vector2(190, 100);
+          //   add(thirdAddText);
+          // } else if (randomWord.text[3] == name.text) {
+          //   fourthAddText = AddText(" ${name.text}")
+          //     ..position = Vector2(260, 100);
+          //   add(fourthAddText);
+          // }
+
+          firstValue.text == "" ? firstValue.text = name.text : secondValue.text == "" ? secondValue.text = name.text :thirdValue.text == "" ? thirdValue.text = name.text : fourthValue.text = name.text;
+          add(name);
+          // if()
         },
         children: [
           // name..text = "${randomAlpha(1).toUpperCase()}"..textRenderer = renderText..position = wordImg.srcPosition
