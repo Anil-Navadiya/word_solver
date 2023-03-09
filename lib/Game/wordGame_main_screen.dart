@@ -1,25 +1,17 @@
 import 'dart:async';
 import 'dart:developer' as dev;
 import 'dart:math';
-import 'dart:math';
-import 'dart:ui' as ui;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/experimental.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/layers.dart';
-import 'package:flame/palette.dart';
-import 'package:flame/sprite.dart';
-import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
 import 'package:word_game/Game/character.dart';
+import 'package:word_game/Game/game_over_screen.dart';
 import 'package:word_game/word_list.dart';
-import 'package:word_game/common_textfield.dart';
-import 'package:word_game/custom_keyboard.dart';
-import 'package:word_game/main.dart';
 
 class WordGameMainScreen extends FlameGame
     with
@@ -40,10 +32,11 @@ class WordGameMainScreen extends FlameGame
 
   // late AddText addText;
 
-  TextComponent firstValue =TextComponent(text: "");
+  TextComponent firstValue = TextComponent(text: "");
   TextComponent secondValue = TextComponent(text: "");
   TextComponent thirdValue = TextComponent(text: "");
   TextComponent fourthValue = TextComponent(text: "");
+  TextComponent tryAgain = TextComponent(text: "");
   late Character character;
   late Sprite abcd;
   late String finalString;
@@ -71,6 +64,14 @@ class WordGameMainScreen extends FlameGame
     style: const TextStyle(color: Colors.black, fontSize: 40),
   );
 
+  final valueRenderText = TextPaint(
+    style: const TextStyle(color: Colors.white, fontSize: 50,backgroundColor: Color(0xffAACF3D)),
+  );
+
+  final tryAgainText = TextPaint(
+    style: const TextStyle(color: Colors.red, fontSize: 40,),
+  );
+
   @override
   FutureOr<void> onLoad() async {
     dev.log(randomAlpha(10).toUpperCase());
@@ -84,7 +85,7 @@ class WordGameMainScreen extends FlameGame
       ..text = getRandomElement(word).toUpperCase()
       ..textRenderer = renderText
       ..position = Vector2(100, 200);
-    add(randomWord);
+    // add(randomWord);
 
     winnerText
       ..text = "You are Winner"
@@ -93,30 +94,37 @@ class WordGameMainScreen extends FlameGame
 
     firstValue
       ..text = ""
-      ..textRenderer = renderText
-      ..position = Vector2(100, 100);
+      ..textRenderer = valueRenderText
+      ..position = Vector2(50, 100);
     add(firstValue);
 
     secondValue
       ..text = ""
-      ..textRenderer = renderText
+      ..textRenderer = valueRenderText
       ..position = Vector2(150, 100);
     add(secondValue);
 
     thirdValue
       ..text = ""
-      ..textRenderer = renderText
-      ..position = Vector2(200, 100);
+      ..textRenderer = valueRenderText
+      ..position = Vector2(250, 100);
     add(thirdValue);
 
     fourthValue
       ..text
-      ..textRenderer = renderText
-      ..position = Vector2(250, 100);
+      ..textRenderer = valueRenderText
+      ..position = Vector2(350, 100);
     add(fourthValue);
 
+    tryAgain
+      ..text = ""
+      ..textRenderer = tryAgainText
+      ..position = Vector2(50, 250);
+
+    finalString =
+        firstValue.text + secondValue.text + thirdValue.text + fourthValue.text;
+
     dev.log("=======> ${randomWord.text}");
-    dev.log("=======> ${randomWord.text[0]}");
 
     randomStringWord = randomMerge(randomWord.text[0], randomWord.text[1],
         randomWord.text[2], randomWord.text[3]);
@@ -159,8 +167,6 @@ class WordGameMainScreen extends FlameGame
       word: randomStringWord[3],
     );
     add(leftButton);
-    dev.log("===========> ${randomStringWord[0]}");
-    dev.log("===========> ${randomStringWord[1]}");
     colorLayer = ColorLayer();
     // addText = AddText("text")..position = Vector2(150, 200);
     // add(addText);
@@ -172,7 +178,7 @@ class WordGameMainScreen extends FlameGame
     bgImage = SpriteComponent()
       ..sprite = await loadSprite("bgImages.jpeg")
       ..size = gameRef.size
-      ..priority = -20;
+      ..priority = -200;
     // add(bgImage);
     //
     // character = Character(
@@ -186,15 +192,12 @@ class WordGameMainScreen extends FlameGame
     abcd = Sprite(abcdImage);
     // TextAddButton();
     // add(TextAddButton());
-    character = Character(
-      sprite: abcd,
-      size: Vector2(150, 150),
-      positions: Vector2(100, 100),
-    );
+    // character = Character(
+    //   sprite: abcd,
+    //   size: Vector2(150, 150),
+    //   positions: Vector2(100, 100),
+    // );
     // add(character);
-    // overlays.add('CommmonTextField');
-    // overlays.add('Keyboard');
-    // overlays.add('CommonButton');
 
     return super.onLoad();
   }
@@ -202,13 +205,7 @@ class WordGameMainScreen extends FlameGame
   @override
   void onTapDown(int pointerId, TapDownInfo info) {
     // TODO: implement onTapDown
-    // if(randomWord.text  == firstAddText.text + secondAddText.text  + thirdAddText.text + fourthAddText.text){
-    //   add(winnerText);
-    // }
-    if (tappedComponent) {
-      // Will add a component at the position that was tapped
-      add(winnerText);
-    }
+
     super.onTapDown(pointerId, info);
   }
 
@@ -218,10 +215,12 @@ class WordGameMainScreen extends FlameGame
     colorLayer.render(canvas);
     canvas.drawCircle(
       // Offset(gameRef.size.x - 207, gameRef.size.y - 200),
-      Offset(205, 700),
+      const Offset(205, 700),
       120,
-      Paint()..color = Colors.white,
+      Paint()..color = Colors.white54,
     );
+    // canvas.drawRect(drawLine, Paint()..color = Colors.blueAccent);
+
 
     super.render(canvas);
   }
@@ -239,21 +238,20 @@ class WordGameMainScreen extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    // _startPosition = info.raw.globalPosition;
     _currentPosition = info.raw.globalPosition;
 
     var delta = _currentPosition - _startPosition;
     dev.log("delta ==> ${delta.distance}");
     dev.log("_currentPosition ====> $_currentPosition");
-
     drawLine = Rect.fromLTWH(100, 100, 5, delta.distance);
     // if (delta.distance > 0) {
     //   addText = AddText(" ${addUpperText.text}")..position = Vector2(200,200);
     //   add(addText);
     // }
-    // if (delta.distance > 10) {
-    //   Rect drawLine = Rect.fromLTWH(_startPosition.dx, 100, 5, delta.distance);
-    // }
+    if (delta.distance > 0) {
+      dev.log("============> come");
+      drawLine= Rect.fromLTWH(_startPosition.dx, 100, 5, 20);
+    }
 
     // if (delta.distance > 10) {
     //   addText.setMoveDirectional(Vector2(delta.dx, delta.dy),Vector2.zero());
@@ -262,17 +260,34 @@ class WordGameMainScreen extends FlameGame
     // }
   }
 
-  void randomCharacter() {
-    return randomWord.text.characters.map((e) => Text(e)).toList().shuffle();
-  }
-
   @override
   void update(double dt) {
 
-    // if(randomWord.text =)
-    // dev.log(randomStringWord[0]);
-    super.update(dt);
+    if (randomWord.text ==
+        firstValue.text +
+            secondValue.text +
+            thirdValue.text +
+            fourthValue.text) {
+      Get.off(() => const GameOver());
+    }
 
+    if (fourthValue.text.isNotEmpty &&
+        (randomWord.text[0] != firstValue.text ||
+            randomWord.text[1] != secondValue.text ||
+            randomWord.text[2] != thirdValue.text ||
+            randomWord.text[3] != fourthValue.text)) {
+      firstValue.text = "";
+      secondValue.text = "";
+      thirdValue.text = "";
+      fourthValue.text = "";
+      add(tryAgain);
+      tryAgain.text = "Please try again";
+
+      Future.delayed(const Duration(seconds: 1),() {
+        tryAgain.removeFromParent();
+      },);
+    }
+    super.update(dt);
   }
 
   void drawRect(Canvas canvas) {
@@ -291,7 +306,7 @@ class WordGameMainScreen extends FlameGame
       randomWord.text[0],
       randomWord.text[1],
       randomWord.text[2],
-      randomWord.text[3],//
+      randomWord.text[3],
     ];
     String allChars = randomWord.text;
     final randomString = List.generate(lengthOfString,
@@ -306,7 +321,6 @@ class WordGameMainScreen extends FlameGame
   }
 
   //
-
   String randomMerge(String a, String b, String c, String d) {
     var mergedCodeUnits = List.from('$a$b$c$d'.codeUnits);
     mergedCodeUnits.shuffle();
@@ -335,29 +349,14 @@ class WordGameMainScreen extends FlameGame
         position: Vector2(positionX, positionY),
         button: wordImg,
         onPressed: () {
-          dev.log("=======> ${name.text}");
-          // if (randomWord.text[0] == name.text) {
-          //   firstAddText = AddText(" ${name.text}")
-          //     ..position = Vector2(50, 100);
-          //   dev.log(firstAddText.text);
-          //   add(firstAddText);
-          // } else if (randomWord.text[1] == name.text) {
-          //   secondAddText = AddText(" ${name.text}")
-          //     ..position = Vector2(120, 100);
-          //   add(secondAddText);
-          // } else if (randomWord.text[2] == name.text) {
-          //   thirdAddText = AddText(" ${name.text}")
-          //     ..position = Vector2(190, 100);
-          //   add(thirdAddText);
-          // } else if (randomWord.text[3] == name.text) {
-          //   fourthAddText = AddText(" ${name.text}")
-          //     ..position = Vector2(260, 100);
-          //   add(fourthAddText);
-          // }
-
-          firstValue.text == "" ? firstValue.text = name.text : secondValue.text == "" ? secondValue.text = name.text :thirdValue.text == "" ? thirdValue.text = name.text : fourthValue.text = name.text;
-          add(name);
-          // if()
+          dev.log("====================> ${name.text}");
+          firstValue.text == ""
+              ? firstValue.text = name.text
+              : secondValue.text == ""
+                  ? secondValue.text = name.text
+                  : thirdValue.text == ""
+                      ? thirdValue.text = name.text
+                      : fourthValue.text = name.text;
         },
         children: [
           // name..text = "${randomAlpha(1).toUpperCase()}"..textRenderer = renderText..position = wordImg.srcPosition
@@ -372,7 +371,7 @@ class WordGameMainScreen extends FlameGame
 class ColorLayer extends PreRenderedLayer {
   @override
   void drawLayer() {
-    canvas.drawColor(Colors.brown.shade400, BlendMode.screen);
+    canvas.drawColor(const Color(0xffE2A073), BlendMode.screen);
   }
 }
 
@@ -397,8 +396,20 @@ class AddText extends TextBoxComponent {
     // TODO: implement onMount
     super.onMount();
   }
-//
 // void setMoveDirectional(Vector2 newMoveDirectional, Vector2 moveDirectional) {
 //   moveDirectional = newMoveDirectional;
 // }
+}
+
+class MyPainter extends CustomPainter { //         <-- CustomPainter class
+  @override
+  void paint(Canvas canvas, Size size) {
+    //                                             <-- Insert your painting code here.
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    // TODO: implement shouldRepaint
+    throw UnimplementedError();
+  }
 }

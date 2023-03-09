@@ -1,8 +1,4 @@
-import 'dart:developer';
-
-import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
-import 'package:word_game/Game/main_screen.dart';
 import 'package:word_game/common_textfield.dart';
 import 'package:word_game/latter.dart';
 
@@ -78,7 +74,7 @@ _insertText(String textToInsert) {
               !Game.selectedChar.contains(e.toUpperCase())))
               .toList(),
         ),
-        Spacer(),
+        const Spacer(),
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
@@ -96,7 +92,6 @@ _insertText(String textToInsert) {
                       : () {
                     setState(() {
                       Game.selectedChar.add(e);
-                      print(Game.selectedChar);
                       if (!word.split('').contains(e.toUpperCase())) {
                         Game.tries++;
                       }
@@ -113,6 +108,10 @@ _insertText(String textToInsert) {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4.0),
                   ),
+
+                  splashColor: Game.selectedChar.contains(e)
+                      ? Colors.black87
+                      : Colors.brown,
                   child: Text(
                     e,
                     style: const TextStyle(
@@ -121,10 +120,6 @@ _insertText(String textToInsert) {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
-                  splashColor: Game.selectedChar.contains(e)
-                      ? Colors.black87
-                      : Colors.brown,
                 );
               }).toList(),
             ),
