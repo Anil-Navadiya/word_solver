@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:word_game/Game/two_word_game_screen.dart';
 import 'package:word_game/common_textfield.dart';
 import 'package:word_game/custom_keyboard.dart';
 import 'package:word_game/splash_screen.dart';
@@ -17,14 +18,14 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Flame.device.fullScreen();
   nouns.take(50).first;
-  runApp(const GetMaterialApp(
+  runApp(GetMaterialApp(
 
     debugShowCheckedModeBanner: false,
     home: Scaffold(
-      // body: GameWidget(
-      //   game: WordGameMainScreen(),
-      // ),
-      body: SplashScreen(),
+      body: GameWidget(
+        game: TwoWordGameMainScreen(),
+      ),
+      // body: SplashScreen(),
       // body: DrawPatternGame(),
 
     ),

@@ -67,21 +67,6 @@ class WordGameMainScreen extends FlameGame
   final random = Random();
   int chance = 3;
 
-
-  // final renderText = TextPaint(
-  //   style: TextStyle( fontSize: 40,
-  //       foreground: Paint()..style = PaintingStyle.stroke..strokeWidth = 6..color = Colors.blue[700]!,
-  //       shadows: const [
-  //         Shadow(
-  //           offset: Offset(5.0, 5.0), //position of shadow
-  //           blurRadius: 16.0, //blur intensity of shadow
-  //           color: Colors.red, //color of shadow with opacity
-  //         ),
-  //
-  //         //add more shadow with different position offset here
-  //       ]
-  //   ),
-  // );
   final renderText = TextPaint(
     style: TextStyle(
         fontSize: 40,
@@ -111,7 +96,6 @@ class WordGameMainScreen extends FlameGame
               color: Colors.red, //color of shadow with opacity
             ),
 
-            //add more shadow with different position offset here
           ]
       )
   );
@@ -123,8 +107,7 @@ class WordGameMainScreen extends FlameGame
         Colors.red,
         Colors.deepPurpleAccent,
         Colors.pinkAccent
-        //add more color here.
-      ],
+         ],
     ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 100.0))),
   );
 
@@ -141,7 +124,8 @@ class WordGameMainScreen extends FlameGame
       ..text = getRandomElement(word).toUpperCase()
       ..textRenderer = renderText
       ..position = Vector2(100, 200);
-    // add(randomWord);
+
+    add(randomWord);
     winnerText
       ..text = "You are Winner"
       ..textRenderer = renderText
@@ -179,7 +163,7 @@ class WordGameMainScreen extends FlameGame
       add(firstValue);
 
       secondValue
-        ..text = " "
+        ..text = ""
         ..textRenderer = valueRenderText
         ..position = Vector2(100, 100);
       add(secondValue);
@@ -270,6 +254,7 @@ class WordGameMainScreen extends FlameGame
     //     size: Vector2(50, 50),
     //     positions: Vector2(50, 50));
     // add(character);
+
 
     final abcdImage = await images
         .load('abcd.jpeg'); // Note that you could also use Sprite.load for this
@@ -507,6 +492,7 @@ class WordGameMainScreen extends FlameGame
                       ? thirdValue.text = name.text
                       : fourthValue.text == ""
               ? fourthValue.text = name.text : fifthValue.text = name.text;
+
         },
         children: [
           // name..text = "${randomAlpha(1).toUpperCase()}"..textRenderer = renderText..position = wordImg.srcPosition
