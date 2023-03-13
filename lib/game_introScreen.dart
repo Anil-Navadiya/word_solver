@@ -1,7 +1,10 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:word_game/Game/wordGame_main_screen.dart';
+import 'package:word_game/Game/hard_level_creation.dart';
+import 'package:word_game/Game/medium_two_word_game_screen.dart';
+import 'package:word_game/Game/easy_wordGame_main_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class GameIntroScreen extends StatelessWidget {
   const GameIntroScreen({Key? key}) : super(key: key);
@@ -21,54 +24,59 @@ class GameIntroScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
-                ElevatedButton(
-                    style: const ButtonStyle(
-                      elevation: MaterialStatePropertyAll(0.0),
-                      backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-                      fixedSize: MaterialStatePropertyAll(Size.fromWidth(350)),
-                    ),
-                    onPressed: () {
-                      Get.to(
+                const SizedBox(height: 20,),
+                commonButton("Easy Level", () {
+                  Get.to(
                         () => GameWidget(
-                          game: WordGameMainScreen(),
-                        ),
-                      );
-                    },
-                    child: Image.asset("assets/images/play_game.png"),),
+                      game: EasyWordGame(),
+                    ),
+                  );
+                }),
+                const SizedBox(
+                  height: 35,
+                ),
+                commonButton("Medium Level", () {
+                  Get.to(
+                        () => GameWidget(
+                      game: MediumTwoWordGame(),
+                    ),
+                  );
+                }),
+                const SizedBox(
+                  height: 35,
+                ),
+                commonButton("Hard Level", () {
+                  Get.to(
+                        () => GameWidget(
+                      game: HardWordGame(0),
+                    ),
+                  );
+                }),
                 const SizedBox(
                   height: 20,
                 ),
-                // ElevatedButton(
-                //   style: const ButtonStyle(
-                //     backgroundColor: MaterialStatePropertyAll(Colors.lime),
-                //     fixedSize: MaterialStatePropertyAll(Size.fromWidth(350)),
-                //   ),
-                //   onPressed: () {},
-                //   child: const Text(
-                //     "Intermediate Level",
-                //     style: TextStyle(fontSize: 35),
-                //   ),
-                // ),
-                // const SizedBox(
-                //   height: 20,
-                // ),
-                // ElevatedButton(
-                //   style: const ButtonStyle(
-                //     backgroundColor: MaterialStatePropertyAll(Colors.lime),
-                //     fixedSize: MaterialStatePropertyAll(Size.fromWidth(350)),
-                //   ),
-                //   onPressed: () {},
-                //   child: const Text(
-                //     "Hard Level",
-                //     style: TextStyle(fontSize: 35),
-                //   ),
-                // )
-              ],
+
+                           ],
             ),
           ),
         ],
       ),
     );
   }
+}
+
+Widget commonButton(String buttonName, void Function()? onPressed) {
+  return ElevatedButton(
+      style: const ButtonStyle(
+        elevation: MaterialStatePropertyAll(0.0),
+        backgroundColor: MaterialStatePropertyAll(Colors.orangeAccent),
+        fixedSize: MaterialStatePropertyAll(Size.fromWidth(350)),
+      ),
+      onPressed: onPressed,
+      child: Text(
+        buttonName,
+        style: GoogleFonts.laBelleAurore(
+          fontSize: 40,height: 2,color: Colors.brown
+        ),
+      ));
 }

@@ -15,20 +15,21 @@ import 'package:word_game/Game/game_winner_screen.dart';
 import 'package:word_game/word_list.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class TwoWordGameMainScreen extends FlameGame
+class HardWordGame extends FlameGame
     with
         PanDetector,
         DoubleTapDetector,
         HasGameRef,
         HasTappables,
         HasDraggables {
+
+  HardWordGame(this.currentIndex );
+  int currentIndex;
   late Layer colorLayer;
   late AddText addUpperText, addLowerText, addRightText, addLeftText;
-
   //String? image;
   //TextAddButton textAddButton = TextAddButton();
   late AddText firstAddText, secondAddText, thirdAddText, fourthAddText;
-
   // late AddText addText;
 
   TextComponent firstValue = TextComponent(text: "");
@@ -41,8 +42,14 @@ class TwoWordGameMainScreen extends FlameGame
   TextComponent secondThirdValue = TextComponent(text: "");
   TextComponent secondFourthValue = TextComponent(text: "");
   TextComponent secondFifthValue = TextComponent(text: "");
+  TextComponent thirdFirstValue = TextComponent(text: "");
+  TextComponent thirdSecondValue = TextComponent(text: "");
+  TextComponent thirdThirdValue = TextComponent(text: "");
+  TextComponent thirdFourthValue = TextComponent(text: "");
+  TextComponent thirdFifthValue = TextComponent(text: "");
   TextComponent tryAgain = TextComponent(text: "");
-  late String wordList, word4List;
+  TextComponent gameLevel = TextComponent();
+  late String wordList, word4List, word5List;
   late Sprite abcd;
   late String finalString;
   late Sprite wordImg;
@@ -57,6 +64,7 @@ class TwoWordGameMainScreen extends FlameGame
   TextComponent randomWord = TextComponent();
   TextComponent randomSecondWord = TextComponent();
   TextComponent completeFirstWordText = TextComponent();
+  TextComponent completeSecondWordText = TextComponent();
   TextComponent upperText = TextComponent();
   TextComponent lowerText = TextComponent();
   TextComponent leftText = TextComponent();
@@ -85,6 +93,24 @@ class TwoWordGameMainScreen extends FlameGame
         //add more shadow with different position offset here
       ],
     ),
+  );
+  final gameLeveltext = TextPaint(
+   style: GoogleFonts.lato(
+     fontSize: 35,
+     foreground: Paint()
+       ..style = PaintingStyle.stroke
+       ..strokeWidth = 4
+       ..color = Colors.greenAccent[700]!,
+     shadows: const [
+       Shadow(
+         offset: Offset(4.0, 4.0), //position of shadow
+         blurRadius: 10.0, //blur intensity of shadow
+         color: Colors.red, //color of shadow with opacity
+       ),
+
+       //add more shadow with different position offset here
+     ],
+   )
   );
 
   final valueRenderText = TextPaint(
@@ -141,6 +167,7 @@ class TwoWordGameMainScreen extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
+    dev.log("==========> $currentIndex");
     dev.log("===========> $chance");
     dev.log(randomAlpha(10).toUpperCase());
     await images.loadAll(
@@ -148,16 +175,26 @@ class TwoWordGameMainScreen extends FlameGame
         "abcd.jpeg",
       ],
     );
+    // randomWord
+    //   ..text = getRandomElement(demoWord[0]).toUpperCase()
+    //   ..textRenderer = renderText
+    //   ..position = Vector2(100, 200);
+    // add(randomWord);
     randomWord
-      ..text = getRandomElement(demoWord).toUpperCase()
+      ..text = wordDemo[currentIndex][0].toUpperCase()
       ..textRenderer = renderText
       ..position = Vector2(100, 200);
-    // add(randomWord);
 
     randomSecondWord
       ..text = getRandomElement(word).toUpperCase()
       ..textRenderer = renderText
       ..position = Vector2(200, 200);
+
+    gameLevel
+      ..text = "Game Level:- ${currentIndex+1}"
+      ..textRenderer = gameLeveltext
+      ..position = Vector2(100, 30);
+    add(gameLevel);
     // randomWord
     //   ..text = "${randomFirstWord.text}${randomSecondWord.text}"
     //   ..textRenderer = renderText
@@ -166,8 +203,15 @@ class TwoWordGameMainScreen extends FlameGame
     completeFirstWordText
       ..text = "You Complete First Word"
       ..textRenderer = firstWordComplete
-      ..position = Vector2(30, 100);
+      ..position = Vector2(30, 80);
+
+    completeSecondWordText
+      ..text = "You Complete Second word"
+      ..textRenderer = firstWordComplete
+      ..position = Vector2(30, 180);
+
     secondWordValue();
+    thirdWordValue();
 
     if (randomWord.text[4] == " ") {
       firstWordValue();
@@ -175,12 +219,15 @@ class TwoWordGameMainScreen extends FlameGame
       firstValue
         ..text = ""
         ..textRenderer = valueRenderText
+        ..absoluteCenter
         ..position = Vector2(30, 100);
+
       add(firstValue);
 
       secondValue
         ..text = ""
         ..textRenderer = valueRenderText
+        ..absoluteCenter
         ..position = Vector2(100, 100);
       add(secondValue);
 
@@ -212,44 +259,28 @@ class TwoWordGameMainScreen extends FlameGame
         firstValue.text + secondValue.text + thirdValue.text + fourthValue.text;
 
     dev.log("=======> ${randomWord.text}");
-    random3StringWord = random3Merge(
-        randomWord.text[0], randomWord.text[1], randomWord.text[2]);
-    random4StringWord = random4Merge(randomWord.text[0], randomWord.text[1],
-        randomWord.text[2], randomWord.text[3]);
+
     random5StringWord = random5Merge(randomWord.text[0], randomWord.text[1],
         randomWord.text[2], randomWord.text[3], randomWord.text[4]);
 
     final imagess = await images.load("white.jpeg");
     wordImg = Sprite(imagess, srcSize: Vector2(0, 0));
 
-    if (randomWord.text[3] == " ") {
-      button(random3StringWord);
-    } else if (randomWord.text[4] == " ") {
-      button(random4StringWord);
-      leftButton = commonButton(
-        name: leftText,
-        positionX: 265.00,
-        positionY: 675.00,
-        word: random4StringWord[3],
-      );
-      add(leftButton);
-    } else {
-      button(random5StringWord);
-      leftButton = commonButton(
-        name: leftText,
-        positionX: 275.00,
-        positionY: 675.00,
-        word: random5StringWord[3],
-      );
-      add(leftButton);
-      middleButton = commonButton(
-        name: middleText,
-        positionX: 190.00,
-        positionY: 675.00,
-        word: random5StringWord[4],
-      );
-      add(middleButton);
-    }
+    button(random5StringWord);
+    leftButton = commonButton(
+      name: leftText,
+      positionX: 275.00,
+      positionY: 675.00,
+      word: random5StringWord[3],
+    );
+    add(leftButton);
+    middleButton = commonButton(
+      name: middleText,
+      positionX: 190.00,
+      positionY: 675.00,
+      word: random5StringWord[4],
+    );
+    add(middleButton);
 
     colorLayer = ColorLayer();
     // addText = AddText("text")..position = Vector2(150, 200);
@@ -304,7 +335,54 @@ class TwoWordGameMainScreen extends FlameGame
       Paint()..color = Colors.white54,
     );
     // canvas.drawRect(drawLine, Paint()..color = Colors.blueAccent);
-
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(50, 140), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(120, 140), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(190, 140), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(50, 240), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(120, 240), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(190, 240), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(260, 240), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(50, 340), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(120, 340), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(190, 340), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(260, 340), radius: 25),
+      Paint()..color = Colors.white54,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center: const Offset(330, 340), radius: 25),
+      Paint()..color = Colors.white54,
+    );
     super.render(canvas);
   }
 
@@ -313,8 +391,8 @@ class TwoWordGameMainScreen extends FlameGame
 
   @override
   void onPanStart(
-    DragStartInfo info,
-  ) {
+      DragStartInfo info,
+      ) {
     _startPosition = info.raw.globalPosition;
     _currentPosition = info.raw.globalPosition;
     dev.log("_startPosition ====> $_startPosition");
@@ -341,189 +419,147 @@ class TwoWordGameMainScreen extends FlameGame
 
   @override
   void update(double dt) {
-    wordList = "${firstValue.text}${secondValue.text}${thirdValue.text}  ";
+    wordList = "${firstValue.text}${secondValue.text}${thirdValue.text}";
     word4List =
-        "${firstValue.text}${secondValue.text}${thirdValue.text}${fourthValue.text} ";
+    "${secondFirstValue.text}${secondSecondValue.text}${secondThirdValue.text}${secondFourthValue.text}";
+    word5List =
+    "${thirdFirstValue.text}${thirdSecondValue.text}${thirdThirdValue.text}${thirdFourthValue.text}${thirdFifthValue.text}";
 
-    if (randomWord.text[3] == " " && randomWord.text[4] == " ") {
-      if (randomWord.text ==
-          "${firstValue.text}${secondValue.text}${thirdValue.text}  ") {
+       if (wordDemo[currentIndex].contains(wordList.toLowerCase())) {
+      if (!completeFirstWordText.isLoaded) {
+        dev.log("call here");
+        add(completeFirstWordText);
+
+        dev.log("====================================> ${wordList[0]}");
+        firstValue.text = firstValue.text;
+        secondValue.text = secondValue.text;
+        thirdValue.text = thirdValue.text;
+        Future.delayed(const Duration(milliseconds: 300),() {
+          firstValue.text ="";
+          secondValue.text ="";
+          thirdValue.text ="";
+        },);
+      }
+    } else {
+      if (wordDemo[currentIndex].contains(word4List.toLowerCase())&& secondFourthValue.text.isNotEmpty) {
+      if (completeFirstWordText.isLoaded && !completeSecondWordText.isLoaded) {
+        add(completeSecondWordText);
+
+        secondFirstValue.text = secondFirstValue.text;
+        secondSecondValue.text = secondSecondValue.text;
+        secondThirdValue.text = secondThirdValue.text;
+        secondFourthValue.text = secondFourthValue.text;
+        Future.delayed(const Duration(milliseconds: 300),() {
+          secondFirstValue.text = "";
+          secondSecondValue.text = "";
+          secondThirdValue.text = "";
+          secondFourthValue.text = "";
+        },);
+        // secondFifthValue.text = secondFifthValue.text;
+      }
+    } else if (wordDemo[currentIndex].contains(word5List.toLowerCase()) && thirdFifthValue.text.isNotEmpty) {
+      if (completeFirstWordText.isLoaded && completeSecondWordText.isLoaded) {
         Future.delayed(
           const Duration(milliseconds: 250),
-          () {
-            Get.off(() => const GameWinner());
+              () {
+            Get.off(() =>  GameWinner(currentIndex: currentIndex,));
           },
         );
-      }
-    } else if (randomWord.text[4] == " ") {
-      // dev.log("========> $word4List");
-      //
-      // dev.log("========> ${word.contains(wordList).toString()}");
-      // dev.log(word.contains(word4List).toString());
-      if (randomWord.text ==
-              "${firstValue.text}${secondValue.text}${thirdValue.text}${fourthValue.text} " ||
-          randomWord.text ==
-              "${secondFirstValue.text}${secondSecondValue.text}${secondThirdValue.text}${secondFourthValue.text} ") {
-        Future.delayed(
-          const Duration(milliseconds: 250),
-          () {
-            Get.off(() => const GameWinner());
-          },
-        );
-      }
-
-      if (demoWord.contains(wordList.toLowerCase())) {
-        add(completeFirstWordText);
-        firstValue.text = "";
-        secondValue.text = "";
-        thirdValue.text = "";
-        fourthValue.text = "";
-      }
-    } else if (randomWord.text[3] != " " && randomWord.text[4] != " ") {
-      if (randomWord.text ==
-              firstValue.text +
-                  secondValue.text +
-                  thirdValue.text +
-                  fourthValue.text +
-                  fifthValue.text ||
-          randomWord.text ==
-              secondFirstValue.text +
-                  secondSecondValue.text +
-                  secondThirdValue.text +
-                  secondFourthValue.text +
-                  secondFifthValue.text) {
-        Future.delayed(
-          const Duration(milliseconds: 250),
-          () {
-            Get.off(() => const GameWinner());
-          },
-        );
-      }
-
-      if (demoWord.contains(wordList.toLowerCase())) {
-        add(completeFirstWordText);
-        firstValue.text = "";
-        secondValue.text = "";
-        thirdValue.text = "";
-        fourthValue.text = "";
-        fifthValue.text = "";
-      } else if (demoWord.contains(word4List.toLowerCase())) {
-        add(completeFirstWordText);
-        firstValue.text = "";
-        secondValue.text = "";
-        thirdValue.text = "";
-        fourthValue.text = "";
-        fifthValue.text = "";
       }
     }
+    }
 
-    if (randomWord.text[3] == " ") {
-      if ((thirdValue.text.isNotEmpty &&
-              (randomWord.text[0] != firstValue.text ||
-                  randomWord.text[1] != secondValue.text ||
-                  randomWord.text[2] != thirdValue.text)) ||
-          (secondFifthValue.text.isNotEmpty &&
-              (randomWord.text[0] != secondFirstValue.text ||
-                  randomWord.text[1] != secondSecondValue.text ||
-                  randomWord.text[2] != secondThirdValue.text))) {
-        firstValue.text = "";
-        secondValue.text = "";
-        thirdValue.text = "";
-        secondFirstValue.text = "";
-        secondSecondValue.text = "";
-        secondThirdValue.text = "";
-        chance -= 1;
-        if (chance <= 0) {
-          Future.delayed(
-            const Duration(milliseconds: 250),
-            () {
-              Get.off(() => const GameOverScreen());
-            },
-          );
-        }
-        add(tryAgain);
-        tryAgain.text = "Please try again";
+    if ((thirdValue.text.isNotEmpty && !wordDemo[currentIndex].contains(wordList.toLowerCase()))) {
+      firstValue.text = "";
+      secondValue.text = "";
+      thirdValue.text = "";
+      secondFirstValue.text = "";
+      secondSecondValue.text = "";
+      secondThirdValue.text = "";
+      chance -= 1;
+      if (chance <= 0) {
         Future.delayed(
-          const Duration(seconds: 1),
-          () {
-            tryAgain.removeFromParent();
+          const Duration(milliseconds: 250),
+              () {
+            Get.off(() => GameOverScreen(currentIndex: currentIndex,));
           },
         );
       }
-    } else if (randomWord.text[4] == " ") {
-      if ((fourthValue.text.isNotEmpty &&
-              (randomWord.text[0] != firstValue.text ||
-                  randomWord.text[1] != secondValue.text ||
-                  randomWord.text[2] != thirdValue.text ||
-                  randomWord.text[3] != fourthValue.text)) ||
-          (secondFourthValue.text.isNotEmpty &&
-              (randomWord.text[0] != secondFirstValue.text ||
-                  randomWord.text[1] != secondSecondValue.text ||
-                  randomWord.text[2] != secondThirdValue.text ||
-                  randomWord.text[3] != secondFourthValue.text))) {
-        firstValue.text = "";
-        secondValue.text = "";
-        thirdValue.text = "";
-        fourthValue.text = "";
-        secondFirstValue.text = "";
-        secondSecondValue.text = "";
-        secondThirdValue.text = "";
-        secondFourthValue.text = "";
-        chance -= 1;
-        if (chance <= 0) {
-          Future.delayed(
-            const Duration(milliseconds: 250),
+      Future.delayed(
+        const Duration(milliseconds: 250),
             () {
-              Get.off(() => const GameOverScreen());
-            },
-          );
-        }
-        add(tryAgain);
-        tryAgain.text = "Please try again";
-        Future.delayed(
-          const Duration(seconds: 1),
-          () {
-            tryAgain.removeFromParent();
-          },
-        );
-      }
-    } else if ((fifthValue.text.isNotEmpty &&
-            (randomWord.text[0] != firstValue.text ||
-                randomWord.text[1] != secondValue.text ||
-                randomWord.text[2] != thirdValue.text ||
-                randomWord.text[3] != fourthValue.text ||
-                randomWord.text[4] != fifthValue.text)) ||
-        (secondFifthValue.text.isNotEmpty &&
-            (randomWord.text[0] != secondFirstValue.text ||
-                randomWord.text[1] != secondSecondValue.text ||
-                randomWord.text[2] != secondThirdValue.text ||
-                randomWord.text[3] != secondFourthValue.text ||
-                randomWord.text[4] != secondFifthValue.text))) {
+          add(tryAgain);
+          tryAgain.text = "Please try again";
+        },
+      );
+
+      Future.delayed(
+        const Duration(seconds: 1),
+            () {
+          tryAgain.removeFromParent();
+        },
+      );
+    }
+    if ((secondFourthValue.text.isNotEmpty && !wordDemo[currentIndex].contains(word4List.toLowerCase()))) {
       firstValue.text = "";
       secondValue.text = "";
       thirdValue.text = "";
       fourthValue.text = "";
-      fifthValue.text = "";
       secondFirstValue.text = "";
       secondSecondValue.text = "";
       secondThirdValue.text = "";
       secondFourthValue.text = "";
-      secondFifthValue.text = "";
+      chance -= 1;
+      if (chance <= 0) {
+        Future.delayed(
+          const Duration(milliseconds: 250),
+              () {
+            Get.off(() =>  GameOverScreen(currentIndex: currentIndex,));
+          },
+        );
+      }
+      Future.delayed(
+        const Duration(milliseconds: 250),
+            () {
+          add(tryAgain);
+          tryAgain.text = "Please try again";
+        },
+      );
+
+      Future.delayed(
+        const Duration(seconds: 1),
+            () {
+          tryAgain.removeFromParent();
+        },
+      );
+    } else if ((thirdFifthValue.text.isNotEmpty &&
+        !wordDemo[currentIndex].contains(word5List.toLowerCase()))) {
+      thirdFirstValue.text = "";
+      thirdSecondValue.text = "";
+      thirdThirdValue.text = "";
+      thirdFourthValue.text = "";
+      thirdFifthValue.text = "";
       chance -= 1;
       dev.log("===========> $chance");
       if (chance <= 0) {
         Future.delayed(
           const Duration(milliseconds: 250),
-          () {
-            Get.off(() => const GameOverScreen());
+              () {
+            Get.off(() => GameOverScreen(currentIndex: currentIndex,));
           },
         );
       }
-      add(tryAgain);
-      tryAgain.text = "Please try again";
+      Future.delayed(
+        const Duration(milliseconds: 250),
+            () {
+          add(tryAgain);
+          tryAgain.text = "Please try again";
+        },
+      );
+
       Future.delayed(
         const Duration(seconds: 1),
-        () {
+            () {
           tryAgain.removeFromParent();
         },
       );
@@ -549,7 +585,7 @@ class TwoWordGameMainScreen extends FlameGame
     ];
     String allChars = randomWord.text;
     final randomString = List.generate(lengthOfString,
-        (index) => allChars[random.nextInt(allChars.length)]).join();
+            (index) => allChars[random.nextInt(allChars.length)]).join();
     return randomString; // return the generated string
   }
 
@@ -561,18 +597,6 @@ class TwoWordGameMainScreen extends FlameGame
 
   String random5Merge(String a, String b, String c, String d, String e) {
     var mergedCodeUnits = List.from('$a$b$c$d$e'.codeUnits);
-    mergedCodeUnits.shuffle();
-    return String.fromCharCodes(mergedCodeUnits.cast<int>());
-  }
-
-  String random4Merge(String a, String b, String c, String d) {
-    var mergedCodeUnits = List.from('$a$b$c$d'.codeUnits);
-    mergedCodeUnits.shuffle();
-    return String.fromCharCodes(mergedCodeUnits.cast<int>());
-  }
-
-  String random3Merge(String a, String b, String c) {
-    var mergedCodeUnits = List.from('$a$b$c'.codeUnits);
     mergedCodeUnits.shuffle();
     return String.fromCharCodes(mergedCodeUnits.cast<int>());
   }
@@ -602,22 +626,33 @@ class TwoWordGameMainScreen extends FlameGame
             firstValue.text == ""
                 ? firstValue.text = name.text
                 : secondValue.text == ""
-                    ? secondValue.text = name.text
-                    : thirdValue.text == ""
-                        ? thirdValue.text = name.text
-                        : fourthValue.text == ""
-                            ? fourthValue.text = name.text
-                            : fifthValue.text = name.text;
-          } else {
+                ? secondValue.text = name.text
+                : thirdValue.text == ""
+                ? thirdValue.text = name.text
+                : fourthValue.text == ""
+                ? fourthValue.text = name.text
+                : fifthValue.text = name.text;
+          } else if (completeFirstWordText.isLoaded &&
+              !completeSecondWordText.isLoaded) {
             secondFirstValue.text == ""
                 ? secondFirstValue.text = name.text
                 : secondSecondValue.text == ""
-                    ? secondSecondValue.text = name.text
-                    : secondThirdValue.text == ""
-                        ? secondThirdValue.text = name.text
-                        : secondFourthValue.text == ""
-                            ? secondFourthValue.text = name.text
-                            : secondFifthValue.text = name.text;
+                ? secondSecondValue.text = name.text
+                : secondThirdValue.text == ""
+                ? secondThirdValue.text = name.text
+                : secondFourthValue.text == ""
+                ? secondFourthValue.text = name.text
+                : secondFifthValue.text = name.text;
+          } else {
+            thirdFirstValue.text == ""
+                ? thirdFirstValue.text = name.text
+                : thirdSecondValue.text == ""
+                ? thirdSecondValue.text = name.text
+                : thirdThirdValue.text == ""
+                ? thirdThirdValue.text = name.text
+                : thirdFourthValue.text == ""
+                ? thirdFourthValue.text = name.text
+                : thirdFifthValue.text = name.text;
           }
         },
         children: [
@@ -683,32 +718,64 @@ class TwoWordGameMainScreen extends FlameGame
     secondFirstValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(30, 300);
+      ..position = Vector2(30, 200);
     add(secondFirstValue);
 
     secondSecondValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(100, 300);
+      ..position = Vector2(100, 200);
     add(secondSecondValue);
 
     secondThirdValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(170, 300);
+      ..position = Vector2(170, 200);
     add(secondThirdValue);
 
     secondFourthValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(240, 300);
+      ..position = Vector2(240, 200);
     add(secondFourthValue);
 
     secondFifthValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(310, 300);
+      ..position = Vector2(310, 200);
     add(secondFifthValue);
+  }
+
+  void thirdWordValue() {
+    thirdFirstValue
+      ..text = ""
+      ..textRenderer = valueRenderText
+      ..position = Vector2(30, 300);
+    add(thirdFirstValue);
+
+    thirdSecondValue
+      ..text = ""
+      ..textRenderer = valueRenderText
+      ..position = Vector2(100, 300);
+    add(thirdSecondValue);
+
+    thirdThirdValue
+      ..text = ""
+      ..textRenderer = valueRenderText
+      ..position = Vector2(170, 300);
+    add(thirdThirdValue);
+
+    thirdFourthValue
+      ..text = ""
+      ..textRenderer = valueRenderText
+      ..position = Vector2(240, 300);
+    add(thirdFourthValue);
+
+    thirdFifthValue
+      ..text = ""
+      ..textRenderer = valueRenderText
+      ..position = Vector2(310, 300);
+    add(thirdFifthValue);
   }
 }
 
@@ -722,9 +789,9 @@ class ColorLayer extends PreRenderedLayer {
 class AddText extends TextBoxComponent {
   AddText(String text)
       : super(
-          text: text,
-          // boxConfig: TextBoxConfig(timePerChar: 0.3),
-        );
+    text: text,
+    // boxConfig: TextBoxConfig(timePerChar: 0.3),
+  );
 
   @override
   void drawBackground(Canvas c) {
@@ -734,5 +801,4 @@ class AddText extends TextBoxComponent {
     //   BasicPalette.white.paint()..style = PaintingStyle.stroke);
     super.drawBackground(c);
   }
-
 }

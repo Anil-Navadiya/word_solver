@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:word_game/Game/wordGame_main_screen.dart';
+import 'package:word_game/Game/easy_wordGame_main_screen.dart';
 import 'package:word_game/game_introScreen.dart';
 
 class SplashScreen extends StatefulWidget {

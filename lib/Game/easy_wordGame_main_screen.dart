@@ -15,7 +15,7 @@ import 'package:word_game/Game/game_winner_screen.dart';
 import 'package:word_game/word_list.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class WordGameMainScreen extends FlameGame
+class EasyWordGame extends FlameGame
     with
         PanDetector,
         DoubleTapDetector,
@@ -335,12 +335,12 @@ class WordGameMainScreen extends FlameGame
      if(randomWord.text[3] == " " && randomWord.text[4] == " "){
        if (randomWord.text ==
            "${firstValue.text}${secondValue.text}${thirdValue.text}  ") {
-         Get.off(() => const GameWinner());
+         Get.off(() => GameWinner(currentIndex: 0,));
        }
      }else if(randomWord.text[4] == " "){
        if (randomWord.text ==
            "${firstValue.text}${secondValue.text}${thirdValue.text}${fourthValue.text} ") {
-         Get.off(() => const GameWinner());
+         Get.off(() => GameWinner(currentIndex: 0,));
        }
      }
      else if(randomWord.text ==
@@ -348,7 +348,7 @@ class WordGameMainScreen extends FlameGame
             secondValue.text +
             thirdValue.text +
             fourthValue.text + fifthValue.text) {
-      Get.off(() => const GameWinner());
+      Get.off(() => GameWinner(currentIndex: 0,));
     }
 
 
@@ -362,7 +362,7 @@ class WordGameMainScreen extends FlameGame
          thirdValue.text = "";
          chance -= 1;
          if(chance <= 0){
-           Get.off(()=> const GameOverScreen());
+           Get.off(()=> GameOverScreen(currentIndex: 0,));
          }
          add(tryAgain);
          tryAgain.text = "Please try again";
@@ -382,7 +382,7 @@ class WordGameMainScreen extends FlameGame
          fourthValue.text = "";
          chance -= 1;
          if(chance <= 0){
-           Get.off(()=> const GameOverScreen());
+           Get.off(()=> GameOverScreen(currentIndex: 0,));
          }
          add(tryAgain);
          tryAgain.text = "Please try again";
@@ -403,7 +403,7 @@ class WordGameMainScreen extends FlameGame
        chance -= 1;
        dev.log("===========> $chance");
        if(chance <= 0){
-         Get.off(()=> const GameOverScreen());
+         Get.off(()=> GameOverScreen(currentIndex: 0,));
        }
        add(tryAgain);
        tryAgain.text = "Please try again";

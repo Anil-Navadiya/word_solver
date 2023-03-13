@@ -2,12 +2,13 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:word_game/Game/two_word_game_screen.dart';
-import 'package:word_game/Game/wordGame_main_screen.dart';
+import 'package:word_game/Game/hard_level_creation.dart';
+import 'package:word_game/Game/medium_two_word_game_screen.dart';
+import 'package:word_game/Game/easy_wordGame_main_screen.dart';
 
 class GameOverScreen extends StatelessWidget {
-  const GameOverScreen({Key? key}) : super(key: key);
-
+  GameOverScreen({Key? key,required this.currentIndex}) : super(key: key);
+  int currentIndex;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +26,7 @@ class GameOverScreen extends StatelessWidget {
                   fixedSize: const MaterialStatePropertyAll(Size(150, 50)),
                 ),
                 onPressed: () {
-                Get.to(() => GameWidget(game: TwoWordGameMainScreen()));
+                Get.to(() => GameWidget(game: HardWordGame(currentIndex)));
             }, child: const Text("Retry",style: TextStyle(
               fontSize: 30,
               color: Colors.deepPurpleAccent,
