@@ -9,6 +9,7 @@ import 'package:word_game/Game/hard_level_creation.dart';
 import 'package:word_game/Game/level_word_game_screen.dart';
 import 'package:word_game/Game/medium_two_word_game_screen.dart';
 import 'package:word_game/Game/easy_wordGame_main_screen.dart';
+import 'package:word_game/Game/responsive_hard_level.dart';
 import 'package:word_game/game_introScreen.dart';
 import 'package:word_game/word_list.dart';
 
@@ -47,14 +48,14 @@ class GameWinner extends StatelessWidget {
                           fixedSize: MaterialStatePropertyAll(Size(240, 75))),
                       onPressed: () {
                         log("this is currentindex ==> ${currentIndex}");
-                        if (currentIndex+1 == wordDemo.length) {
+                        if (currentIndex+1 == wordsList.length) {
                           Get.to(()=> const GameIntroScreen());
                         } else {
                           currentIndex++;
                           log("this is updatedcurrentindex ==> ${currentIndex}");
 
                           Get.to(() =>
-                              GameWidget(game: HardWordGame(currentIndex)));
+                              GameWidget(game: ResponsiveHardLevel(currentIndex)));
                         }
                       },
                       child: Row(

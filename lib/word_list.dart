@@ -1,4 +1,3 @@
-import 'package:english_words/english_words.dart';
 
 List<String> word = [
   "also ",
@@ -1045,11 +1044,11 @@ List<String> demoWord = [
   "bte  ",
 ];
 
-List<List<String>> wordDemo = [
+List<List<String>> wordsList = [
   [
     "beast",
     "best",
-    "bte",
+    "bet",
   ],
   [
     "carat",
@@ -1072,8 +1071,52 @@ List<List<String>> wordDemo = [
     "los",
   ],
   [
-    "",
-    "",
-    ""
-  ]
+    "warne",
+    "warn",
+    "war",
+  ],
+  [
+    "actus",
+    "acts",
+    "act",
+  ],
+  [
+    "vices",
+    "vice",
+    "ice",
+  ],
+  [
+    "echos",
+    "cosh",
+    "ech",
+  ],
+  [
+    "krone",
+    "kore",
+    "one",
+  ],
+  [
+    "solve",
+    "sloe",
+    "ole",
+  ],
+  [
+    "gluey",
+    "glue",
+    "gel",
+  ],
+  [
+    "whops",
+    "whop",
+    "who",
+  ],
+  [
+    "crony",
+    "cory",
+    "cry",
+  ], [
+    "flake",
+    "fake",
+    "lea",
+  ],
 ];

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:word_game/common_textfield.dart';
-import 'package:word_game/latter.dart';
 
 
 class Keyboard extends StatefulWidget {
@@ -134,4 +133,26 @@ class Game {
   //adding the number of tries
   static int tries = 0;
   static List<String> selectedChar = [];
+}
+Widget letter(String character, bool hidden) {
+  return Container(
+    height: 65,
+    width: 50,
+    padding: const EdgeInsets.all(12.0),
+    decoration: BoxDecoration(
+      color: const Color(0xFF231954),
+      borderRadius: BorderRadius.circular(4.0),
+    ),
+    child: Visibility(
+      visible: !hidden,
+      child: Text(
+        character,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 30.0,
+        ),
+      ),
+    ),
+  );
 }

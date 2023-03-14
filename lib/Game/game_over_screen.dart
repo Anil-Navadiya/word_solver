@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:word_game/Game/hard_level_creation.dart';
-import 'package:word_game/Game/medium_two_word_game_screen.dart';
-import 'package:word_game/Game/easy_wordGame_main_screen.dart';
 
 class GameOverScreen extends StatelessWidget {
   GameOverScreen({Key? key,required this.currentIndex}) : super(key: key);

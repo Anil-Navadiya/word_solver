@@ -16,7 +16,7 @@ import 'package:word_game/const/color.dart';
 import 'package:word_game/word_list.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HardWordGame extends FlameGame
+class ResponsiveHardLevel extends FlameGame
     with
         PanDetector,
         DoubleTapDetector,
@@ -24,7 +24,7 @@ class HardWordGame extends FlameGame
         HasTappables,
         HasDraggables {
 
-  HardWordGame(this.currentIndex );
+  ResponsiveHardLevel(this.currentIndex );
   int currentIndex;
   late Layer colorLayer;
   late AddText addUpperText, addLowerText, addRightText, addLeftText;
@@ -93,22 +93,22 @@ class HardWordGame extends FlameGame
     ),
   );
   final gameLeveltext = TextPaint(
-   style: GoogleFonts.lato(
-     fontSize: 35,
-     foreground: Paint()
-       ..style = PaintingStyle.stroke
-       ..strokeWidth = 4
-       ..color = const Color(0xffFFCBA4),
-     shadows: const [
-       Shadow(
-         offset: Offset(4.0, 4.0), //position of shadow
-         blurRadius: 10.0, //blur intensity of shadow
-         color: Colors.red, //color of shadow with opacity
-       ),
+      style: GoogleFonts.lato(
+        fontSize: 35,
+        foreground: Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 4
+          ..color = const Color(0xffFFCBA4),
+        shadows: const [
+          Shadow(
+            offset: Offset(4.0, 4.0), //position of shadow
+            blurRadius: 10.0, //blur intensity of shadow
+            color: Colors.red, //color of shadow with opacity
+          ),
 
-       //add more shadow with different position offset here
-     ],
-   )
+          //add more shadow with different position offset here
+        ],
+      )
   );
 
   final valueRenderText = TextPaint(
@@ -209,48 +209,13 @@ class HardWordGame extends FlameGame
 
     secondWordValue();
     thirdWordValue();
-
-    if (randomWord.text[4] == " ") {
       firstWordValue();
-    } else {
-      firstValue
-        ..text = ""
-        ..textRenderer = valueRenderText
-        ..absoluteCenter
-        ..position = Vector2(30, 100);
 
-      add(firstValue);
-
-      secondValue
-        ..text = ""
-        ..textRenderer = valueRenderText
-        ..absoluteCenter
-        ..position = Vector2(100, 100);
-      add(secondValue);
-
-      thirdValue
-        ..text = ""
-        ..textRenderer = valueRenderText
-        ..position = Vector2(170, 100);
-      add(thirdValue);
-
-      fourthValue
-        ..text = ""
-        ..textRenderer = valueRenderText
-        ..position = Vector2(240, 100);
-      add(fourthValue);
-
-      fifthValue
-        ..text
-        ..textRenderer = valueRenderText
-        ..position = Vector2(310, 100);
-      add(fifthValue);
-    }
 
     tryAgain
       ..text = ""
       ..textRenderer = tryAgainText
-      ..position = Vector2(70, 820);
+      ..position = Vector2(gameRef.size.x*0.1, gameRef.size.y*0.93);
 
     finalString =
         firstValue.text + secondValue.text + thirdValue.text + fourthValue.text;
@@ -259,25 +224,17 @@ class HardWordGame extends FlameGame
 
     random5StringWord = random5Merge(randomWord.text[0], randomWord.text[1],
         randomWord.text[2], randomWord.text[3], randomWord.text[4]);
+    dev.log("===========>upper ${random5StringWord[0]}");
+    dev.log("===========>lower ${random5StringWord[1]}");
+    dev.log("===========>right ${random5StringWord[2]}");
+    dev.log("===========>left ${random5StringWord[3]}");
+    dev.log("===========>middle ${random5StringWord[4]}");
 
     final imagess = await images.load("white.jpeg");
     wordImg = Sprite(imagess, srcSize: Vector2(0, 0));
 
     button(random5StringWord);
-    leftButton = commonButton(
-      name: leftText,
-      positionX: 275.00,
-      positionY: 675.00,
-      word: random5StringWord[3],
-    );
-    add(leftButton);
-    middleButton = commonButton(
-      name: middleText,
-      positionX: 190.00,
-      positionY: 675.00,
-      word: random5StringWord[4],
-    );
-    add(middleButton);
+
 
     colorLayer = ColorLayer();
     // addText = AddText("text")..position = Vector2(150, 200);
@@ -324,60 +281,63 @@ class HardWordGame extends FlameGame
   @override
   void render(Canvas canvas) {
     // TODO: implement render
+
     colorLayer.render(canvas);
     canvas.drawCircle(
-      // Offset(gameRef.size.x - 207, gameRef.size.y - 200),
-      const Offset(205, 700),
-      120,
+      Offset(gameRef.size.x*0.5, gameRef.size.y*0.75),
+      // const Offset(205, 700),
+      gameRef.size.y*0.2,
       Paint()..color = ColorConst().redColor,
+
     );
-    // canvas.drawRect(drawLine, Paint()..color = Colors.blueAccent);
+    // canvas.drawRect(Rect.fromLTWH(0, gameRef.size.y/2, gameRef.size.x, gameRef.size.y/2),  Paint()..imageFilter..color = ColorConst().redColor,);
+
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(50, 140), radius: 25),
+      Rect.fromCircle(center: Offset(gameRef.size.x*0.12, gameRef.size.y*0.16), radius: 25),
+    Paint()..color = ColorConst().textBoxColor,
+    );
+    canvas.drawRect(
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.32, gameRef.size.y*0.16), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(120, 140), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.52,gameRef.size.y*0.16), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(190, 140), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.12, gameRef.size.y*0.28), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(50, 240), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.32, gameRef.size.y*0.28), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(120, 240), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.52, gameRef.size.y*0.28), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(190, 240), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.72, gameRef.size.y*0.28), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(260, 240), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.12, gameRef.size.y*0.40), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(50, 340), radius: 25),
-      Paint()..color = ColorConst().textBoxColor,
-    );
-    canvas.drawRect(
-      Rect.fromCircle(center: const Offset(120, 340), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.32, gameRef.size.y*0.40), radius: 25),
       Paint()..color =ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(190, 340), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.52, gameRef.size.y*0.40), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(260, 340), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.72, gameRef.size.y*0.40), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     canvas.drawRect(
-      Rect.fromCircle(center: const Offset(330, 340), radius: 25),
+      Rect.fromCircle(center:  Offset(gameRef.size.x*0.92, gameRef.size.y*0.40), radius: 25),
       Paint()..color = ColorConst().textBoxColor,
     );
     super.render(canvas);
@@ -421,8 +381,9 @@ class HardWordGame extends FlameGame
     "${secondFirstValue.text}${secondSecondValue.text}${secondThirdValue.text}${secondFourthValue.text}";
     word5List =
     "${thirdFirstValue.text}${thirdSecondValue.text}${thirdThirdValue.text}${thirdFourthValue.text}${thirdFifthValue.text}";
-
-       if (wordsList[currentIndex].contains(wordList.toLowerCase())) {
+    firstValue.position = Vector2(gameRef.size.x*0.07, gameRef.size.x*0.22);
+    secondValue.position = Vector2(gameRef.size.x*0.27, gameRef.size.y*0.22);
+    if (wordsList[currentIndex].contains(wordList.toLowerCase())) {
       if (!completeFirstWordText.isLoaded) {
         dev.log("call here");
         add(completeFirstWordText);
@@ -434,7 +395,7 @@ class HardWordGame extends FlameGame
         value
           ..text = wordList[2]
           ..textRenderer = valueRenderText
-          ..position = Vector2(170, 100);
+          ..position = Vector2(gameRef.size.x*0.47, gameRef.size.y*0.1);
         add(value);
         // Future.delayed(const Duration(seconds: 60),() {
         //   firstValue.text ="";
@@ -444,36 +405,36 @@ class HardWordGame extends FlameGame
       }
     } else {
       if (wordsList[currentIndex].contains(word4List.toLowerCase())&& secondFourthValue.text.isNotEmpty) {
-      if (completeFirstWordText.isLoaded && !completeSecondWordText.isLoaded) {
-        add(completeSecondWordText);
+        if (completeFirstWordText.isLoaded && !completeSecondWordText.isLoaded) {
+          add(completeSecondWordText);
 
-        secondFirstValue.text = word4List[0];
-        secondSecondValue.text = word4List[1];
-        secondThirdValue.text = word4List[2];
-        secondFourthValue.text = "";
-        value2
-          ..text = word4List[3]
-          ..textRenderer = valueRenderText
-          ..position = Vector2(240, 200);
-        add(value2);
-        // Future.delayed(const Duration(milliseconds: 300),() {
-        //   secondFirstValue.text = "";
-        //   secondSecondValue.text = "";
-        //   secondThirdValue.text = "";
-        //   secondFourthValue.text = "";
-        // },);
-        secondFifthValue.text = "";
+          secondFirstValue.text = word4List[0];
+          secondSecondValue.text = word4List[1];
+          secondThirdValue.text = word4List[2];
+          secondFourthValue.text = "";
+          value2
+            ..text = word4List[3]
+            ..textRenderer = valueRenderText
+            ..position = Vector2(gameRef.size.x*0.67, gameRef.size.y*0.21);
+          add(value2);
+          // Future.delayed(const Duration(milliseconds: 300),() {
+          //   secondFirstValue.text = "";
+          //   secondSecondValue.text = "";
+          //   secondThirdValue.text = "";
+          //   secondFourthValue.text = "";
+          // },);
+          secondFifthValue.text = "";
+        }
+      } else if (wordsList[currentIndex].contains(word5List.toLowerCase()) && thirdFifthValue.text.isNotEmpty) {
+        if (completeFirstWordText.isLoaded && completeSecondWordText.isLoaded) {
+          Future.delayed(
+            const Duration(milliseconds: 250),
+                () {
+              Get.off(() =>  GameWinner(currentIndex: currentIndex,));
+            },
+          );
+        }
       }
-    } else if (wordsList[currentIndex].contains(word5List.toLowerCase()) && thirdFifthValue.text.isNotEmpty) {
-      if (completeFirstWordText.isLoaded && completeSecondWordText.isLoaded) {
-        Future.delayed(
-          const Duration(milliseconds: 250),
-              () {
-            Get.off(() =>  GameWinner(currentIndex: currentIndex,));
-          },
-        );
-      }
-    }
     }
 
     if ((thirdValue.text.isNotEmpty && !wordsList[currentIndex].contains(wordList.toLowerCase()))) {
@@ -668,82 +629,105 @@ class HardWordGame extends FlameGame
   void button(String word) {
     upperButton = commonButton(
       name: upperText,
-      positionX: 190.00,
-      positionY: 600.00,
+      positionX: gameRef.size.x*0.46,
+      positionY: gameRef.size.y*0.57,
       word: word[0],
     );
     add(upperButton);
     lowerButton = commonButton(
       name: lowerText,
-      positionX: 190.00,
-      positionY: 750.00,
+      positionX: gameRef.size.x*0.46,
+      positionY: gameRef.size.y*0.86,
       word: word[1],
     );
     add(lowerButton);
     rightButton = commonButton(
       name: rightText,
-      positionX: 100.00,
-      positionY: 675.00,
+      positionX:gameRef.size.x*0.22,
+      positionY: gameRef.size.y*0.715,
       word: word[2],
     );
     add(rightButton);
+    leftButton = commonButton(
+      name: leftText,
+      positionX: gameRef.size.x*0.70,
+      positionY: gameRef.size.y*0.715,
+      word: word[3],
+    );
+    add(leftButton);
+    middleButton = commonButton(
+      name: middleText,
+      positionX: gameRef.size.x*0.46,
+      positionY: gameRef.size.y*0.715,
+      word: word[4],
+    );
+    add(middleButton);
   }
 
   void firstWordValue() {
     firstValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(50, 100);
+      ..absoluteCenter
+      ..position = Vector2(gameRef.size.x*0.07, gameRef.size.y*0.09);
+
     add(firstValue);
 
     secondValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(150, 100);
+      ..absoluteCenter
+      ..position = Vector2(gameRef.size.x*0.27, gameRef.size.y*0.09);
     add(secondValue);
 
     thirdValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(250, 100);
+      ..position = Vector2(gameRef.size.x*0.47, gameRef.size.y*0.09);
     add(thirdValue);
 
     fourthValue
+      ..text = ""
+      ..textRenderer = valueRenderText
+      ..position = Vector2(gameRef.size.x*0.67, gameRef.size.y*0.09);
+    add(fourthValue);
+
+    fifthValue
       ..text
       ..textRenderer = valueRenderText
-      ..position = Vector2(350, 100);
-    add(fourthValue);
+      ..position = Vector2(gameRef.size.x*0.87, gameRef.size.y*0.09);
+    add(fifthValue);
   }
 
   void secondWordValue() {
     secondFirstValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(30, 200);
+      ..position = Vector2(gameRef.size.x*0.07, gameRef.size.y*0.21);
     add(secondFirstValue);
 
     secondSecondValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(100, 200);
+      ..position = Vector2(gameRef.size.x*0.27, gameRef.size.y*0.21);
     add(secondSecondValue);
 
     secondThirdValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(170, 200);
+      ..position = Vector2(gameRef.size.x*0.47, gameRef.size.y*0.21);
     add(secondThirdValue);
 
     secondFourthValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(240, 200);
+      ..position = Vector2(gameRef.size.x*0.67, gameRef.size.y*0.21);
     add(secondFourthValue);
 
     secondFifthValue
       ..text = " "
       ..textRenderer = valueRenderText
-      ..position = Vector2(310, 200);
+      ..position = Vector2(gameRef.size.x*0.87, gameRef.size.y*0.21);
     add(secondFifthValue);
 
   }
@@ -752,31 +736,31 @@ class HardWordGame extends FlameGame
     thirdFirstValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(30, 300);
+      ..position = Vector2(gameRef.size.x*0.07, gameRef.size.y*0.33);
     add(thirdFirstValue);
 
     thirdSecondValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(100, 300);
+      ..position = Vector2(gameRef.size.x*0.27, gameRef.size.y*0.33);
     add(thirdSecondValue);
 
     thirdThirdValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(170, 300);
+      ..position = Vector2(gameRef.size.x*0.47, gameRef.size.y*0.33);
     add(thirdThirdValue);
 
     thirdFourthValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(240, 300);
+      ..position = Vector2(gameRef.size.x*0.67, gameRef.size.y*0.33);
     add(thirdFourthValue);
 
     thirdFifthValue
       ..text = ""
       ..textRenderer = valueRenderText
-      ..position = Vector2(310, 300);
+      ..position = Vector2(gameRef.size.x*0.87, gameRef.size.y*0.33);
     add(thirdFifthValue);
   }
 }
