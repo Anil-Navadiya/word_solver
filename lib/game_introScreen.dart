@@ -26,7 +26,7 @@ class GameIntroScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 20,),
                 commonButton("Easy Level", () {
-                  Get.to(
+                  Get.off(
                         () => GameWidget(
                       game: EasyWordGame(),
                     ),
@@ -36,7 +36,7 @@ class GameIntroScreen extends StatelessWidget {
                   height: 35,
                 ),
                 commonButton("Medium Level", () {
-                  Get.to(
+                  Get.off(
                         () => GameWidget(
                       game: MediumTwoWordGame(),
                     ),
@@ -46,7 +46,7 @@ class GameIntroScreen extends StatelessWidget {
                   height: 35,
                 ),
                 commonButton("Hard Level", () {
-                  Get.to(
+                  Get.off(
                         () => GameWidget(
                       game: HardWordGame(0),
                     ),

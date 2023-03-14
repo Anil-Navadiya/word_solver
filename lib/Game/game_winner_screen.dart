@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:word_game/Game/hard_level_creation.dart';
-import 'package:word_game/Game/level_word_game_screen.dart';
 import 'package:word_game/Game/medium_two_word_game_screen.dart';
 import 'package:word_game/Game/easy_wordGame_main_screen.dart';
 import 'package:word_game/Game/responsive_hard_level.dart';
@@ -34,6 +33,7 @@ class GameWinner extends StatelessWidget {
               Center(
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     "You Are Winner",
@@ -42,35 +42,24 @@ class GameWinner extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  ElevatedButton(
-                      style: const ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(Colors.red),
-                          fixedSize: MaterialStatePropertyAll(Size(240, 75))),
-                      onPressed: () {
-                        log("this is currentindex ==> ${currentIndex}");
-                        if (currentIndex+1 == wordsList.length) {
-                          Get.to(()=> const GameIntroScreen());
-                        } else {
-                          currentIndex++;
-                          log("this is updatedcurrentindex ==> ${currentIndex}");
+                  commonLevelButton( onPressed: () { Get.to(()=>GameWidget(game: EasyWordGame()));},buttonName: "Easy level",),
+                  const SizedBox(height: 30,),
+                  commonLevelButton( onPressed: () { Get.to(()=>GameWidget(game: MediumTwoWordGame()));},buttonName: "Medium level",),
+                  const SizedBox(height: 30,),
+                  commonLevelButton(buttonName: "Hard level", onPressed:  () {
+                    log("this is currentI ndex ==> $currentIndex");
+                    if (currentIndex+1 == wordsList.length) {
+                      Get.to(()=> const GameIntroScreen());
+                    } else {
+                      currentIndex++;
+                      log("this is updatedCurrentIndex ==> $currentIndex");
 
-                          Get.to(() =>
-                              GameWidget(game: ResponsiveHardLevel(currentIndex)));
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.navigate_next, size: 40),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Next Level",
-                            style: TextStyle(fontSize: 30),
-                          ),
-                        ],
-                      )),
+                      Get.to(() =>
+                          GameWidget(game: HardWordGame(currentIndex)));
+                    }
+
+                  },),
+
                   const SizedBox(
                     height: 100,
                   ),
@@ -163,4 +152,25 @@ class GameWinner extends StatelessWidget {
           )),
     );
   }
+}
+
+Widget commonLevelButton({void Function()? onPressed,String? buttonName}){
+  return ElevatedButton(
+      style: const ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll(Colors.red),
+          fixedSize: MaterialStatePropertyAll(Size(280, 75))),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.navigate_next, size: 40),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(
+            buttonName!,
+            style: const TextStyle(fontSize: 30),
+          ),
+        ],
+      ));
 }

@@ -12,6 +12,7 @@ import 'package:random_string/random_string.dart';
 import 'package:word_game/Game/character.dart';
 import 'package:word_game/Game/game_over_screen.dart';
 import 'package:word_game/Game/game_winner_screen.dart';
+import 'package:word_game/const/color.dart';
 import 'package:word_game/word_list.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -70,7 +71,7 @@ class EasyWordGame extends FlameGame
   final renderText = TextPaint(
     style: TextStyle(
         fontSize: 40,
-        foreground: Paint()..style = PaintingStyle.stroke..strokeWidth = 4..color = Colors.greenAccent[700]!,
+        foreground: Paint()..style = PaintingStyle.stroke..strokeWidth = 4..color = ColorConst().textColor,
         shadows: const [
           Shadow(
             offset: Offset(4.0, 4.0), //position of shadow
@@ -88,7 +89,7 @@ class EasyWordGame extends FlameGame
     // style: const TextStyle(color: Colors.white, fontSize: 50,backgroundColor: Color(0xffAACF3D)),
       style: GoogleFonts.bakbakOne(
           fontSize: 60,
-          foreground: Paint()..style = PaintingStyle.stroke..strokeWidth = 4..color = Colors.blue[700]!,
+          foreground: Paint()..style = PaintingStyle.stroke..strokeWidth = 4..color = ColorConst().printTextColor,
           shadows: const [
             Shadow(
               offset: Offset(4.0, 4.0), //position of shadow
@@ -335,12 +336,12 @@ class EasyWordGame extends FlameGame
      if(randomWord.text[3] == " " && randomWord.text[4] == " "){
        if (randomWord.text ==
            "${firstValue.text}${secondValue.text}${thirdValue.text}  ") {
-         Get.off(() => GameWinner(currentIndex: 0,));
+         Get.off(() => GameWinner(currentIndex: -1,));
        }
      }else if(randomWord.text[4] == " "){
        if (randomWord.text ==
            "${firstValue.text}${secondValue.text}${thirdValue.text}${fourthValue.text} ") {
-         Get.off(() => GameWinner(currentIndex: 0,));
+         Get.off(() => GameWinner(currentIndex: -1,));
        }
      }
      else if(randomWord.text ==
@@ -348,7 +349,7 @@ class EasyWordGame extends FlameGame
             secondValue.text +
             thirdValue.text +
             fourthValue.text + fifthValue.text) {
-      Get.off(() => GameWinner(currentIndex: 0,));
+      Get.off(() => GameWinner(currentIndex: -1,));
     }
 
 
@@ -532,7 +533,7 @@ class EasyWordGame extends FlameGame
 class ColorLayer extends PreRenderedLayer {
   @override
   void drawLayer() {
-    canvas.drawColor(const Color(0xffE2A073), BlendMode.screen);
+    canvas.drawColor(ColorConst().bgColor, BlendMode.screen);
   }
 }
 

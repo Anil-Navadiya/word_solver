@@ -8,7 +8,6 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:word_game/Game/hard_level_creation.dart';
-import 'package:word_game/Game/level_word_game_screen.dart';
 import 'package:word_game/Game/medium_two_word_game_screen.dart';
 import 'package:word_game/Game/responsive_hard_level.dart';
 import 'package:word_game/common_textfield.dart';
@@ -26,16 +25,16 @@ void main() {
   Flame.device.fullScreen();
   nouns.take(50).first;
   runApp(
-    GetMaterialApp(
+    const GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: GameWidget(
-            game: ResponsiveHardLevel(0),
-           ),
-      ),
       // home: Scaffold(
-      //   body: GameIntroScreen(),
+      //   body: GameWidget(
+      //       game: HardWordGame(0),
+      //      ),
       // ),
+      home: Scaffold(
+        body: SplashScreen(),
+      ),
     ),
   );
 }

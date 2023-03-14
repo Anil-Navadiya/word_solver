@@ -12,6 +12,7 @@ import 'package:random_string/random_string.dart';
 import 'package:word_game/Game/character.dart';
 import 'package:word_game/Game/game_over_screen.dart';
 import 'package:word_game/Game/game_winner_screen.dart';
+import 'package:word_game/const/color.dart';
 import 'package:word_game/word_list.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -75,7 +76,7 @@ class MediumTwoWordGame extends FlameGame
       foreground: Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 4
-        ..color = Colors.greenAccent[700]!,
+        ..color = ColorConst().textColor,
       shadows: const [
         Shadow(
           offset: Offset(4.0, 4.0), //position of shadow
@@ -95,7 +96,7 @@ class MediumTwoWordGame extends FlameGame
       foreground: Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 4
-        ..color = Colors.blue[700]!,
+        ..color = ColorConst().printTextColor,
       shadows: const [
         Shadow(
           offset: Offset(4.0, 4.0), //position of shadow
@@ -361,7 +362,7 @@ class MediumTwoWordGame extends FlameGame
         Future.delayed(
           const Duration(milliseconds: 250),
           () {
-            Get.off(() => GameWinner(currentIndex: 0,));
+            Get.off(() => GameWinner(currentIndex: -1,));
           },
         );
       }
@@ -388,7 +389,7 @@ class MediumTwoWordGame extends FlameGame
           Future.delayed(
             const Duration(milliseconds: 250),
                 () {
-                  Get.off(() => GameWinner(currentIndex: 0,));
+                  Get.off(() => GameWinner(currentIndex: -1,));
             },
           );
         }
@@ -424,7 +425,7 @@ class MediumTwoWordGame extends FlameGame
         Future.delayed(
           const Duration(milliseconds: 250),
           () {
-            Get.off(() => GameWinner(currentIndex: 0,));
+            Get.off(() => GameWinner(currentIndex: -1,));
           },
         );
       }
@@ -744,7 +745,7 @@ class MediumTwoWordGame extends FlameGame
 class ColorLayer extends PreRenderedLayer {
   @override
   void drawLayer() {
-    canvas.drawColor(const Color(0xffE2A073), BlendMode.screen);
+    canvas.drawColor(ColorConst().bgColor, BlendMode.screen);
   }
 }
 
