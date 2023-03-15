@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer' as dev;
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -24,7 +25,8 @@ class HardWordGame extends FlameGame
         HasTappables,
         HasDraggables {
 
-  HardWordGame(this.currentIndex );
+  HardWordGame(this.currentIndex,this.word);
+  String word;
   int currentIndex;
   late Layer colorLayer;
   late AddText addUpperText, addLowerText, addRightText, addLeftText;
@@ -172,20 +174,16 @@ class HardWordGame extends FlameGame
         "abcd.jpeg",
       ],
     );
+    randomWord
+      ..text = word.toUpperCase()
+      ..textRenderer = renderText
+      ..position = Vector2(100, 200);
     // randomWord
     //   ..text = getRandomElement(demoWord[0]).toUpperCase()
     //   ..textRenderer = renderText
     //   ..position = Vector2(100, 200);
     // add(randomWord);
-    randomWord
-      ..text = wordsList[currentIndex][0].toUpperCase()
-      ..textRenderer = renderText
-      ..position = Vector2(100, 200);
 
-    randomSecondWord
-      ..text = getRandomElement(word).toUpperCase()
-      ..textRenderer = renderText
-      ..position = Vector2(200, 200);
 
     gameLevel
       ..text = "Game Level:- ${currentIndex+1}"
@@ -415,14 +413,14 @@ class HardWordGame extends FlameGame
   void onPanEnd(DragEndInfo info) {}
 
   @override
-  void update(double dt) {
+  void update(double dt) async {
     wordList = "${firstValue.text}${secondValue.text}${thirdValue.text}";
     word4List =
     "${secondFirstValue.text}${secondSecondValue.text}${secondThirdValue.text}${secondFourthValue.text}";
     word5List =
     "${thirdFirstValue.text}${thirdSecondValue.text}${thirdThirdValue.text}${thirdFourthValue.text}${thirdFifthValue.text}";
 
-       if (wordsList[currentIndex].contains(wordList.toLowerCase())) {
+          if (firebaseWordList.contains(wordList.toLowerCase())) {
       if (!completeFirstWordText.isLoaded) {
         dev.log("call here");
         add(completeFirstWordText);
@@ -443,7 +441,7 @@ class HardWordGame extends FlameGame
         // },);
       }
     } else {
-      if (wordsList[currentIndex].contains(word4List.toLowerCase())&& secondFourthValue.text.isNotEmpty) {
+      if (firebaseWordList.contains(word4List.toLowerCase())&& secondFourthValue.text.isNotEmpty) {
       if (completeFirstWordText.isLoaded && !completeSecondWordText.isLoaded) {
         add(completeSecondWordText);
 
@@ -464,7 +462,7 @@ class HardWordGame extends FlameGame
         // },);
         secondFifthValue.text = "";
       }
-    } else if (wordsList[currentIndex].contains(word5List.toLowerCase()) && thirdFifthValue.text.isNotEmpty) {
+    } else if (firebaseWordList.contains(word5List.toLowerCase()) && thirdFifthValue.text.isNotEmpty) {
       if (completeFirstWordText.isLoaded && completeSecondWordText.isLoaded) {
         Future.delayed(
           const Duration(milliseconds: 250),
@@ -476,7 +474,7 @@ class HardWordGame extends FlameGame
     }
     }
 
-    if ((thirdValue.text.isNotEmpty && !wordsList[currentIndex].contains(wordList.toLowerCase()))) {
+    if ((thirdValue.text.isNotEmpty && !firebaseWordList.contains(wordList.toLowerCase()))) {
       firstValue.text = "";
       secondValue.text = "";
       thirdValue.text = "";
@@ -504,7 +502,7 @@ class HardWordGame extends FlameGame
         },
       );
     }
-    if ((secondFourthValue.text.isNotEmpty && !wordsList[currentIndex].contains(word4List.toLowerCase()))) {
+    if ((secondFourthValue.text.isNotEmpty && !firebaseWordList.contains(word4List.toLowerCase()))) {
 
       secondFirstValue.text = "";
       secondSecondValue.text = "";
@@ -534,7 +532,7 @@ class HardWordGame extends FlameGame
         },
       );
     } else if ((thirdFifthValue.text.isNotEmpty &&
-        !wordsList[currentIndex].contains(word5List.toLowerCase()))) {
+        !firebaseWordList.contains(word5List.toLowerCase()))) {
       thirdFirstValue.text = "";
       thirdSecondValue.text = "";
       thirdThirdValue.text = "";

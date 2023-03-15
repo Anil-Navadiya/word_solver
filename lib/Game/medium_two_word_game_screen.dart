@@ -25,7 +25,9 @@ class MediumTwoWordGame extends FlameGame
         HasDraggables {
   late Layer colorLayer;
   late AddText addUpperText, addLowerText, addRightText, addLeftText;
-
+  // MediumTwoWordGame(this.currentIndex,this.word);
+  // String word;
+  // int currentIndex;
   //String? image;
   //TextAddButton textAddButton = TextAddButton();
   late AddText firstAddText, secondAddText, thirdAddText, fourthAddText;
@@ -160,10 +162,6 @@ class MediumTwoWordGame extends FlameGame
       ..textRenderer = renderText
       ..position = Vector2(100, 200);
 
-    randomSecondWord
-      ..text = getRandomElement(word).toUpperCase()
-      ..textRenderer = renderText
-      ..position = Vector2(200, 200);
     // randomWord
     //   ..text = "${randomFirstWord.text}${randomSecondWord.text}"
     //   ..textRenderer = renderText

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:math'as math;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,11 +11,14 @@ import 'package:word_game/Game/medium_two_word_game_screen.dart';
 import 'package:word_game/Game/easy_wordGame_main_screen.dart';
 import 'package:word_game/Game/responsive_hard_level.dart';
 import 'package:word_game/game_introScreen.dart';
+import 'package:word_game/getData_firebase.dart';
 import 'package:word_game/word_list.dart';
 
 class GameWinner extends StatelessWidget {
   GameWinner({Key? key, required this.currentIndex}) : super(key: key);
   int currentIndex;
+  GetData getData = GetData();
+  late String newWord;
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +50,14 @@ class GameWinner extends StatelessWidget {
                   const SizedBox(height: 30,),
                   commonLevelButton( onPressed: () { Get.to(()=>GameWidget(game: MediumTwoWordGame()));},buttonName: "Medium level",),
                   const SizedBox(height: 30,),
-                  commonLevelButton(buttonName: "Hard level", onPressed:  () {
-                    log("this is currentI ndex ==> $currentIndex");
-                    if (currentIndex+1 == wordsList.length) {
-                      Get.to(()=> const GameIntroScreen());
-                    } else {
-                      currentIndex++;
-                      log("this is updatedCurrentIndex ==> $currentIndex");
-
-                      Get.to(() =>
-                          GameWidget(game: HardWordGame(currentIndex)));
-                    }
+                  commonLevelButton(buttonName: "Hard level", onPressed:  () async{
+                    currentIndex++;
+                    newWord = await getData.getWord(index: currentIndex.toString());
+                    log("this is current Index ==> $currentIndex");
+                    log("==================> ${firebaseWordList.toString()}");
+                    log(firebaseWordList.toString());
+                    Get.to(() =>
+                        GameWidget(game: HardWordGame(currentIndex,newWord)));
 
                   },),
 

@@ -1,6 +1,7 @@
 import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:english_words/english_words.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -20,10 +21,13 @@ import 'dart:math' as math;
 import 'package:flutter/services.dart';
 import 'Game/easy_wordGame_main_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Flame.device.fullScreen();
-  nouns.take(50).first;
+  await Firebase.initializeApp(name: "word-game",options: const FirebaseOptions(apiKey: "AIzaSyAf1pm-skzMuQkiMWSZrKM2LG0V37H6B3A",appId: "1:899147076964:android:7b04a10a5e8a53d5445671", messagingSenderId: "", projectId: "word-game-7df91"));
+      Flame.device.fullScreen();
+  nouns
+      .take(50)
+      .first;
   runApp(
     const GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -38,4 +42,6 @@ void main() {
     ),
   );
 }
+
+// if(!(dataSnapshot.child("Users").child(busNum).exists()))
 // body: SplashScreen(),
