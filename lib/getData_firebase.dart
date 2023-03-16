@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -15,12 +16,26 @@ class GetData {
     firebaseWordList.addAll(data[index]);
 
     String word = data[index][0] as String;
-    log("=======================================> $word");
+    log("=======================================> $firebaseWordList");
 
-    // if(index == data.length.toString()){
-    //   log("Come in game length");
-    //   Get.to(()=> GameIntroScreen());
-    // }
+
     return word;
+  }
+
+  Future<int> getWordListLength() async {
+    DocumentSnapshot ds = await FirebaseFirestore.instance.collection("wordData").doc("3kTYnvBiBmMjkvAxKHXu").get();
+    Map<String, dynamic> data = ds.data() as Map<String, dynamic>;
+
+    // log("=======+++++++++++++++============> ${ data.entries.elementAt(0).key}");
+    return data.length;
+  }
+
+
+  Future<String> getWordLength() async {
+    DocumentSnapshot ds = await FirebaseFirestore.instance.collection("wordData").doc("3kTYnvBiBmMjkvAxKHXu").get();
+    Map<String, dynamic> data = ds.data() as Map<String, dynamic>;
+
+    // log("=======+++++++++++++++============> ${ data.entries.elementAt(0).key}");
+    return data.keys.toList()[0].toString();
   }
 }

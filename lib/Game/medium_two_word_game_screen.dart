@@ -9,9 +9,8 @@ import 'package:flame/layers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
-import 'package:word_game/Game/character.dart';
-import 'package:word_game/Game/game_over_screen.dart';
-import 'package:word_game/Game/game_winner_screen.dart';
+import 'package:word_game/game_over_screen.dart';
+import 'package:word_game/game_winner_screen.dart';
 import 'package:word_game/const/color.dart';
 import 'package:word_game/word_list.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -145,8 +144,7 @@ class MediumTwoWordGame extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
-    dev.log("===========> $chance");
-    dev.log(randomAlpha(10).toUpperCase());
+
     await images.loadAll(
       [
         "abcd.jpeg",
@@ -263,13 +261,7 @@ class MediumTwoWordGame extends FlameGame
     colorLayer = ColorLayer();
     // addText = AddText("text")..position = Vector2(150, 200);
     // add(addText);
-
-    dev.log(
-        "=========================> ${randomWord.text[0] + randomWord.text[1] + randomWord.text[2] + randomWord.text[3] + randomWord.text[4]}");
-
-    dev.log(
-        "=========================================> ${upperText.text + lowerText.text + rightText.text + leftText.text + middleText.text}");
-    bgImage = SpriteComponent()
+ bgImage = SpriteComponent()
       ..sprite = await loadSprite("bgImages.jpeg")
       ..size = gameRef.size
       ..priority = -200;
@@ -326,8 +318,6 @@ class MediumTwoWordGame extends FlameGame
   ) {
     _startPosition = info.raw.globalPosition;
     _currentPosition = info.raw.globalPosition;
-    dev.log("_startPosition ====> $_startPosition");
-    dev.log("_currentPosition ====> $_currentPosition");
   }
 
   @override
@@ -335,8 +325,6 @@ class MediumTwoWordGame extends FlameGame
     _currentPosition = info.raw.globalPosition;
 
     var delta = _currentPosition - _startPosition;
-    dev.log("delta ==> ${delta.distance}");
-    dev.log("_currentPosition ====> $_currentPosition");
     drawLine = Rect.fromLTWH(100, 100, 5, delta.distance);
 
     // if (delta.distance > 0) {
@@ -365,10 +353,7 @@ class MediumTwoWordGame extends FlameGame
         );
       }
     } else if (randomWord.text[4] == " ") {
-      // dev.log("========> $word4List");
-      //
-      // dev.log("========> ${word.contains(wordList).toString()}");
-      // dev.log(word.contains(word4List).toString());
+
 
       if (demoWord.contains(wordList.toLowerCase())) {
         add(completeFirstWordText);
@@ -625,7 +610,6 @@ class MediumTwoWordGame extends FlameGame
         position: Vector2(positionX, positionY),
         button: wordImg,
         onPressed: () {
-          dev.log("====================> ${name.text}");
           if (!completeFirstWordText.isLoaded) {
             firstValue.text == ""
                 ? firstValue.text = name.text

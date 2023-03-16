@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'dart:math'as math;
+import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:word_game/Game/hard_level_creation.dart';
+import 'package:word_game/level_list_screen.dart';
 import 'package:word_game/Game/medium_two_word_game_screen.dart';
 import 'package:word_game/Game/easy_wordGame_main_screen.dart';
 import 'package:word_game/Game/responsive_hard_level.dart';
@@ -46,20 +47,46 @@ class GameWinner extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  commonLevelButton( onPressed: () { Get.to(()=>GameWidget(game: EasyWordGame()));},buttonName: "Easy level",),
-                  const SizedBox(height: 30,),
-                  commonLevelButton( onPressed: () { Get.to(()=>GameWidget(game: MediumTwoWordGame()));},buttonName: "Medium level",),
-                  const SizedBox(height: 30,),
-                  commonLevelButton(buttonName: "Hard level", onPressed:  () async{
-                    currentIndex++;
-                    newWord = await getData.getWord(index: currentIndex.toString());
-                    log("this is current Index ==> $currentIndex");
-                    log("==================> ${firebaseWordList.toString()}");
-                    log(firebaseWordList.toString());
-                    Get.to(() =>
-                        GameWidget(game: HardWordGame(currentIndex,newWord)));
+                  // commonLevelButton( onPressed: () { Get.to(()=>GameWidget(game: EasyWordGame()));},buttonName: "Easy level",),
+                  // const SizedBox(height: 30,),
+                  // commonLevelButton( onPressed: () { Get.to(()=>GameWidget(game: MediumTwoWordGame()));},buttonName: "Medium level",),
+                  // const SizedBox(height: 30,),
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("wordData")
+                        .doc("3kTYnvBiBmMjkvAxKHXu")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      return commonLevelButton(
+                        buttonName: "Next level",
+                        onPressed: () async {
+                          var wordData = snapshot.data;
+                          Map<String, dynamic> data =
+                              wordData!.data() as Map<String, dynamic>;
+                          if (snapshot.hasData) {
+                            if (currentIndex + 1 == data.length) {
+                              Get.to(() => GameIntroScreen(
+                                    currentIndex: data.length,
+                                  ));
+                            } else {
+                              currentIndex++;
+                              newWord = await getData.getWord(
+                                  index: currentIndex.toString());
+                              // Get.to(() =>
+                              //     GameWidget(game: HardWordGame(currentIndex,newWord)));
 
-                  },),
+                              FirebaseFirestore.instance
+                                  .collection('currentIndex')
+                                  .doc("YT7xfKjJUJRhlKeuPGRv")
+                                  .update({'currentIndex': currentIndex});
+                              Get.to(() =>
+                                  LevelListScreen(currentIndex: currentIndex));
+                            }
+                          }
+                        },
+                      );
+                    },
+                  ),
 
                   const SizedBox(
                     height: 100,
@@ -155,7 +182,7 @@ class GameWinner extends StatelessWidget {
   }
 }
 
-Widget commonLevelButton({void Function()? onPressed,String? buttonName}){
+Widget commonLevelButton({void Function()? onPressed, String? buttonName}) {
   return ElevatedButton(
       style: const ButtonStyle(
           backgroundColor: MaterialStatePropertyAll(Colors.red),

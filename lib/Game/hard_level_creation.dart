@@ -10,9 +10,8 @@ import 'package:flame/layers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
-import 'package:word_game/Game/character.dart';
-import 'package:word_game/Game/game_over_screen.dart';
-import 'package:word_game/Game/game_winner_screen.dart';
+import 'package:word_game/game_over_screen.dart';
+import 'package:word_game/game_winner_screen.dart';
 import 'package:word_game/const/color.dart';
 import 'package:word_game/word_list.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -167,8 +166,6 @@ class HardWordGame extends FlameGame
   @override
   FutureOr<void> onLoad() async {
     dev.log("==========> $currentIndex");
-    dev.log("===========> $chance");
-    dev.log(randomAlpha(10).toUpperCase());
     await images.loadAll(
       [
         "abcd.jpeg",
@@ -248,7 +245,7 @@ class HardWordGame extends FlameGame
     tryAgain
       ..text = ""
       ..textRenderer = tryAgainText
-      ..position = Vector2(70, 820);
+      ..position = Vector2(30,gameRef.size.y*0.5);
 
     finalString =
         firstValue.text + secondValue.text + thirdValue.text + fourthValue.text;
@@ -281,11 +278,6 @@ class HardWordGame extends FlameGame
     // addText = AddText("text")..position = Vector2(150, 200);
     // add(addText);
 
-    dev.log(
-        "=========================> ${randomWord.text[0] + randomWord.text[1] + randomWord.text[2] + randomWord.text[3] + randomWord.text[4]}");
-
-    dev.log(
-        "=========================================> ${upperText.text + lowerText.text + rightText.text + leftText.text + middleText.text}");
     bgImage = SpriteComponent()
       ..sprite = await loadSprite("bgImages.jpeg")
       ..size = gameRef.size
@@ -309,8 +301,10 @@ class HardWordGame extends FlameGame
     // );
     // add(character);
     // TextAddButton();
+    // gameRef.overlays.add("gameBg");
 
     return super.onLoad();
+
   }
 
   @override
@@ -327,7 +321,7 @@ class HardWordGame extends FlameGame
       // Offset(gameRef.size.x - 207, gameRef.size.y - 200),
       const Offset(205, 700),
       120,
-      Paint()..color = ColorConst().redColor,
+      Paint()..color = ColorConst().brownColor,
     );
     // canvas.drawRect(drawLine, Paint()..color = Colors.blueAccent);
     canvas.drawRect(
@@ -390,8 +384,6 @@ class HardWordGame extends FlameGame
       ) {
     _startPosition = info.raw.globalPosition;
     _currentPosition = info.raw.globalPosition;
-    dev.log("_startPosition ====> $_startPosition");
-    dev.log("_currentPosition ====> $_currentPosition");
   }
 
   @override
@@ -399,12 +391,10 @@ class HardWordGame extends FlameGame
     _currentPosition = info.raw.globalPosition;
 
     var delta = _currentPosition - _startPosition;
-    dev.log("delta ==> ${delta.distance}");
-    dev.log("_currentPosition ====> $_currentPosition");
     drawLine = Rect.fromLTWH(100, 100, 5, delta.distance);
 
     // if (delta.distance > 0) {
-    //   dev.log("============> come");
+    //
     //   drawLine= Rect.fromLTWH(_startPosition.dx, 100, 5, 20);
     // }
   }
@@ -422,10 +412,8 @@ class HardWordGame extends FlameGame
 
           if (firebaseWordList.contains(wordList.toLowerCase())) {
       if (!completeFirstWordText.isLoaded) {
-        dev.log("call here");
         add(completeFirstWordText);
 
-        dev.log("====================================> ${wordList[0]}");
         firstValue.text = wordList[0];
         secondValue.text = wordList[1];
         thirdValue.text = "";
@@ -503,7 +491,6 @@ class HardWordGame extends FlameGame
       );
     }
     if ((secondFourthValue.text.isNotEmpty && !firebaseWordList.contains(word4List.toLowerCase()))) {
-
       secondFirstValue.text = "";
       secondSecondValue.text = "";
       secondThirdValue.text = "";
@@ -539,7 +526,6 @@ class HardWordGame extends FlameGame
       thirdFourthValue.text = "";
       thirdFifthValue.text = "";
       chance -= 1;
-      dev.log("===========> $chance");
       if (chance <= 0) {
         Future.delayed(
           const Duration(milliseconds: 250),
@@ -620,7 +606,6 @@ class HardWordGame extends FlameGame
         position: Vector2(positionX, positionY),
         button: wordImg,
         onPressed: () {
-          dev.log("====================> ${name.text}");
           if (!completeFirstWordText.isLoaded) {
             firstValue.text == ""
                 ? firstValue.text = name.text
